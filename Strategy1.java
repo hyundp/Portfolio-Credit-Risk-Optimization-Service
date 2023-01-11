@@ -4,8 +4,8 @@ import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class Main2 {
-    final static int num = 10000;
+public class Strategy1 {
+    final static int num = 80000;
     public static int return_num() { // 0~80000 사이의 문제 번호 값을 입력
         try {
             Scanner n = new Scanner(System.in);
@@ -42,11 +42,18 @@ public class Main2 {
         }
     }
 
-    public static BigStructure[] make_solution(String file_name) throws IOException{
-        Scanner scanner = new Scanner(new File(file_name));
+    public static void main(String[] args) throws IOException {
+
+        long start_time = System.currentTimeMillis();
+        Scanner scanner = new Scanner(new File("result_80000.txt"));
+
         String r1 = scanner.nextLine(); // 변수 이름부
         ArrayList<Integer> list_key;
         ArrayList<Float> list_val;
+  // start read
+
+        //int num = 80000; // 문제 갯수
+
         BigStructure[] sol = new BigStructure[num];
         String[] r;
         for (int i = 0; i < num; i++) {
@@ -78,34 +85,15 @@ public class Main2 {
 
             }
         }   // result.txt 읽기 수행
-        System.out.println("finish");
-        return sol;
-    }
 
-    public static void main(String[] args) throws IOException {
-
-        long start_time = System.currentTimeMillis();
-        BigStructure[] sol1 = make_solution("result_0_do.txt");
-        BigStructure[] sol2 = make_solution("result_10000_do.txt");
-        BigStructure[] sol3 = make_solution("result_20000_do.txt");
-        BigStructure[] sol4 = make_solution("result_30000_do.txt");
-        BigStructure[] sol5 = make_solution("result_40000_do.txt");
-        BigStructure[] sol6 = make_solution("result_50000_do.txt");
-        BigStructure[] sol7 = make_solution("result_60000_do.txt");
-        BigStructure[] sol8 = make_solution("result_70000_do.txt");
-
-  // start read point
-
-        //int num = 80000; // 문제 갯수
-
-
-
+        list_key = null;
+        list_val = null;
 
         long end_time = System.currentTimeMillis();
 
 
         // ---------프로그램 실행 메인 --------------------------
-        boolean program_on = false;
+        boolean program_on = true;
         int main_choice;
 
         float load_time =  (end_time - start_time)/1000f;

@@ -1,17 +1,11 @@
 import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Scanner;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class Main3 {
-    final static int num = 80000;
+public class Strategy2 {
+    final static int num = 10000;
     public static int return_num() { // 0~80000 사이의 문제 번호 값을 입력
         try {
             Scanner n = new Scanner(System.in);
@@ -48,20 +42,12 @@ public class Main3 {
         }
     }
 
-    public static void main(String[] args) throws IOException {
-
-        long start_time = System.currentTimeMillis();
-        Scanner scanner = new Scanner(new File("result_80000.txt"));
-
-        String r1 = scanner.nextLine(); 
-        // start read point
-
-        //int num = 80000; 
-        ArrayList<Float> solve_time = new ArrayList<>();
-        ArrayList<String> status = new ArrayList<>();
-        ArrayList<Float> object_value = new ArrayList<>();     
-        ArrayList<LinkedHashMap> map_list = new ArrayList<>();
-        LinkedHashMap<Integer, Float> map = new LinkedHashMap<Integer, Float>();
+    public static BigStructure[] make_solution(String file_name) throws IOException{
+        Scanner scanner = new Scanner(new File(file_name));
+        String r1 = scanner.nextLine(); // 변수 이름부
+        ArrayList<Integer> list_key;
+        ArrayList<Float> list_val;
+        BigStructure[] sol = new BigStructure[num];
         String[] r;
         for (int i = 0; i < num; i++) {
             System.out.println("this num: "+i);
@@ -69,37 +55,57 @@ public class Main3 {
             r = null;
 
             r2 = scanner.nextLine();
+            list_key = new ArrayList<>();
+            list_val = new ArrayList<>();
 
             r = r2.split("\t");
-            int n = Integer.parseInt(r[4]); 
-            solve_time.add(Float.parseFloat(r[3]));
-            status.add(r[0]);
-            
-           
+            int n = Integer.parseInt(r[4]); // n : 각 문제에서의 결정 변수들의 갯수
+
+            // 결정변수와 그에 해당하는 값들을 저장
             if (Objects.equals(r[0], "optimal")) {
                 //status	primal objective	gap	   solve_time	number_of_var	Vars	    value
-                object_value.add(Float.parseFloat(r[1]));
                 for (int j = 0; j < n; j++) {
-                    map.put(Integer.parseInt(r[5+j]),Float.parseFloat(r[5+j+n]));
+                    list_key.add(Integer.parseInt(r[5 + j]));
+                    list_val.add(Float.parseFloat(r[5 + j + n]));
                 }
+                sol[i] = new BigStructure(r[0], Float.parseFloat(r[1]), Float.parseFloat(r[3]), list_key, list_val);
             } else {
-                object_value.add(0.0f);
                 for (int j = 0; j < n; j++) {
-                    map.put(Integer.parseInt(r[5+j]), 0.0f);
+                    list_key.add(Integer.parseInt(r[5 + j]));
 
                 }
+                sol[i] = new BigStructure(r[0], Float.parseFloat(r[3]), list_key);
+
             }
-            
-            map_list.add(map);
-        }
-        // System.out.println(map_list.get(0));
+        }   // result.txt 읽기 수행
+        System.out.println("finish");
+        return sol;
+    }
+
+    public static void main(String[] args) throws IOException {
+
+        long start_time = System.currentTimeMillis();
+        BigStructure[] sol1 = make_solution("result_0_do.txt");
+        BigStructure[] sol2 = make_solution("result_10000_do.txt");
+        BigStructure[] sol3 = make_solution("result_20000_do.txt");
+        BigStructure[] sol4 = make_solution("result_30000_do.txt");
+        BigStructure[] sol5 = make_solution("result_40000_do.txt");
+        BigStructure[] sol6 = make_solution("result_50000_do.txt");
+        BigStructure[] sol7 = make_solution("result_60000_do.txt");
+        BigStructure[] sol8 = make_solution("result_70000_do.txt");
+
+  // start read point
+
+        //int num = 80000; // 문제 갯수
+
+
+
 
         long end_time = System.currentTimeMillis();
 
-    }
-}
+
         // ---------프로그램 실행 메인 --------------------------
-        boolean program_on = true;
+        boolean program_on = false;
         int main_choice;
 
         float load_time =  (end_time - start_time)/1000f;
@@ -131,18 +137,18 @@ public class Main3 {
                 int sol_n; // sol_n 은 문제 번호, index는 sol_n - 1을 해 주어야 함.
                 if (main_choice == 1) {
                     sol_n = return_num();
-                    System.out.println("문제의 풀이 시간 : " + solve_time.get(sol_n - 1));
+                    System.out.println("문제의 풀이 시간 : " + sol[sol_n - 1].solve_time);
                 } else if (main_choice == 2) {
                     sol_n = return_num();
-                    System.out.println(sol_n +"번 문제 : " + status.get(sol_n - 1));
-                    if (status.get(sol_n - 1).equals("optimal")) {
-                        System.out.println("최적 목적식 값 : " + object_value.get(sol_n - 1));
+                    System.out.println(sol_n +"번 문제 : " + sol[sol_n - 1].status);
+                    if (sol[sol_n-1].status.equals("optimal")) {
+                        System.out.println("최적 목적식 값 : " + sol[sol_n - 1].primal_obj);
 
                         String file_name = "result_"+"p_2_"+sol_n+".txt";
                         FileWriter fw2 = new FileWriter(file_name);
                         //System.out.print("최적 해 값 : ");
                         //System.out.print(val);
-                        fw2.write(map_list.get(sol_n-1).values().toString());
+                        fw2.write(sol[sol_n-1].sol_val.toString());
                         fw2.close();
                         System.out.println("최적 해 값들이 "+file_name+"에 저장되었습니다.");
 
@@ -151,7 +157,7 @@ public class Main3 {
 
                     float sum = 0f;
                     for (int i = 0; i < num; i++) {
-                        sum += solve_time.get(i);
+                        sum += sol[i].solve_time;
                     }
                     System.out.println("문제의 평균 풀이 시간 : " + sum / num);
 
@@ -160,8 +166,8 @@ public class Main3 {
                     float time = 0;
                     int cnt = 0;
                     for (int i = 0; i < num; i++) {
-                        if (map_list.get(i).containsKey(key)) {
-                            time += solve_time.get(i);
+                        if (sol[i].sol_key.contains(key)) {
+                            time += sol[i].solve_time;
                             cnt++;
                         }
                     }
@@ -178,8 +184,8 @@ public class Main3 {
                     int unsolved_num = 0;
 
                     for (int i = 0; i < num; i++) {
-                        if (map_list.get(i).containsKey(key)) {
-                            if (status.get(i).equals("optimal")) {
+                        if (sol[i].sol_key.contains(key)) {
+                            if (sol[i].status.equals("optimal")) {
                                 solved.add(i + 1);
                                 solved_num++;
                             } else {
@@ -211,15 +217,15 @@ public class Main3 {
                     String file_name = "result_"+"p_"+main_choice+"_"+"x"+key+".txt";
                     FileWriter fw = new FileWriter(file_name);
                     for (int i = 0; i < num; i++) {
-                        if (map_list.get(i).containsKey(key) && status.get(i).equals("optimal")) {
+                        if (sol[i].sol_key.contains(key) && sol[i].status.equals("optimal")) {
                             cnt++;
                             if (main_choice == 6) {
-                                String str = "x" + key + "가 포함된 문제 중 풀린 문제 번호: " + (i + 1) + "의 목적식 값 -> " + object_value.get(i);
+                                String str = "x" + key + "가 포함된 문제 중 풀린 문제 번호: " + (i + 1) + "의 목적식 값 -> " + sol[i].primal_obj;
                                 fw.write(str+"\n");
                                 //System.out.println(str);
                             }
                             if (main_choice == 7) {
-                                String str = "x" + key + "가 포함된 문제 중 풀린 문제 번호: " + (i + 1) + "의 최적해 값들 -> " + object_value.get(i);
+                                String str = "x" + key + "가 포함된 문제 중 풀린 문제 번호: " + (i + 1) + "의 최적해 값들 -> " + sol[i].sol_val;
                                 fw.write(str+"\n");
                                 //System.out.println(str);
 
@@ -244,7 +250,7 @@ public class Main3 {
                     if(num8 > 0){
                         ArrayList condition_satiesfied = new ArrayList();
                         for (int i = 0; i < num; i++) {
-                            if (object_value.get(i) <= num8 && object_value.get(i) > 0) {
+                            if (sol[i].primal_obj <= num8 && sol[i].primal_obj > 0) {
                                 condition_satiesfied.add(i + 1);
                                 cnt++;
                             }
@@ -277,16 +283,15 @@ public class Main3 {
                     ArrayList s = new ArrayList();
 
                     for (int i = 0; i < num; i++) {
-                        if (map_list.get(i).containsKey(nn) && status.get(i).equals("optimal")) {
-                            
-                            Float v = (Float) map_list.get(i).get(nn);
+                        if (sol[i].sol_key.contains(nn) && sol[i].status.equals("optimal")) {
+                            int index = sol[i].sol_key.indexOf(nn);
 
-                            if (v > range && sign.equals(">")) {
+                            if (sol[i].sol_val.get(index) > range && sign.equals(">")) {
                                 s.add(i+1);
                                 //System.out.print(i+1 + " ");
                                 cnt++;
                             }
-                            else if (v < range && sign.equals("<")) {
+                            else if (sol[i].sol_val.get(index) < range && sign.equals("<")) {
                                 //System.out.print(i+1 + " ");
                                 s.add(i+1);
                                 cnt++;
@@ -320,7 +325,5 @@ public class Main3 {
                 System.out.println(e.getMessage());
             }
         }
-
     }
-    
 }
