@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.*;
 
 @SuppressWarnings("unchecked")
-public class Main4 {
+public class Strategy4 {
     final static int num = 80000;
     public static Scanner iterScanner;
     public static String iter1;
@@ -112,7 +112,7 @@ public class Main4 {
 
         //int num = 80000; // 문제 갯수
 
-        Solution2[] sol = new Solution2[num];
+        SmallStructure[] sol = new SmallStructure[num];
         String[] r;
         for (int i = 0; i < num; i++) {
             System.out.println("this num: "+i);
@@ -130,13 +130,13 @@ public class Main4 {
                 for (int j = 0; j < n; j++) {
                     list_key.add(Integer.parseInt(r[5 + j]));
                 }
-                sol[i] = new Solution2(r[0], Float.parseFloat(r[1]), Float.parseFloat(r[3]), list_key);
+                sol[i] = new SmallStructure(r[0], Float.parseFloat(r[1]), Float.parseFloat(r[3]), list_key);
             } else {
                 for (int j = 0; j < n; j++) {
                     list_key.add(Integer.parseInt(r[5 + j]));
 
                 }
-                sol[i] = new Solution2(r[0], Float.parseFloat(r[3]), list_key);
+                sol[i] = new SmallStructure(r[0], Float.parseFloat(r[3]), list_key);
 
             }
         }   // result.txt 읽기 수행
