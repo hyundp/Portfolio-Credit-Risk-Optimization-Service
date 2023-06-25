@@ -3,7 +3,7 @@
 DS Team Project (22.10 ~ 22.12)
 
 ### 주제
-Portfolio Credit-Risk Optimization 문제를 해결하여 서비스를 사용자에게 서비스를 제공하자.
+Portfolio Credit-Risk Optimization 문제를 해결하여 사용자에게 서비스를 제공하자.
 
 ![image](https://user-images.githubusercontent.com/75602169/211878110-4f0018f3-72d2-4379-b652-39d4571f01ad.png)
 
