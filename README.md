@@ -1,6 +1,5 @@
-# Data-Structure-Team-Project
-
-DS Team Project (22.10 ~ 22.12)
+# Portfolio Credit-Risk Optimization Service
+(22.10 ~ 22.12)
 
 ### 주제
 Portfolio Credit-Risk Optimization 문제를 해결하여 사용자에게 서비스를 제공하자.
